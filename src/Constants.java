@@ -7,4 +7,7 @@ public class Constants {
     public static final double SCALE = 1e9; // 1 pixel = 1,000,000,000 meters (1e9) (USED FOR PHYSICS ONLY)
     public static final double GRAVITATIONAL_CONSTANT = 6.67430e-11;
     public static final double TIME_SCALE = 1000000; //1000000 seconds per 1 real second
+    public static double ZOOM = 1.0;
+    public static double PAN_X = 0.0;
+    public static double PAN_Y = 0.0;
 }

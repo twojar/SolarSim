@@ -28,6 +28,7 @@ public class Window extends JFrame implements Runnable {
         Constants.INSETS_RIGHT = insets.right;
 
         g2 = (Graphics2D) this.getGraphics();
+        this.addKeyListener(new KeyHandler());
 
         //sun body pair
         this.sun = new Body(1.989e30, 0, 0, 0, 0,20);
