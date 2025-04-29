@@ -3,20 +3,21 @@ import java.awt.*;
 public class Circle {
     public Color color;
     public Body body;
-    public double radius;
 
     //construct
-    public Circle(Body body, int radius, Color color) {
+    public Circle(Body body, Color color) {
         this.body = body;
-        this.radius = radius;
         this.color = color;
     }
 
     //draw circle
     public void draw(Graphics g) {
         g.setColor(color);
-        //g.drawOval((int) body.x, (int) body.y, (int) radius * 2, (int) radius * 2);
-        g.fillOval((int) body.x, (int) body.y, (int) radius* 2, (int) radius * 2);
+
+        //draw relative to center
+        int screenX = (int)(Constants.SCREEN_WIDTH / 2 + body.x / Constants.SCALE);
+        int screenY = (int)(Constants.SCREEN_HEIGHT / 2 + body.y / Constants.SCALE);
+        g.fillOval((int) (screenX - body.radius), (int) (screenY - body.radius), (int) body.radius * 2, (int) body.radius * 2);
     }
 
 
