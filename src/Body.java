@@ -14,5 +14,9 @@ public class Body {
         this.radius = radius;
     }
 
+    public double getVisualRadius(){
+        return  Math.cbrt(this.radius) * 0.01;
+    }
+
 
 }

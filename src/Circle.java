@@ -19,11 +19,14 @@ public class Circle {
         //draw relative to center
         int screenX = (int)(Constants.SCREEN_WIDTH / 2 + (body.x / Constants.SCALE) * Constants.ZOOM + Constants.PAN_X);
         int screenY = (int)(Constants.SCREEN_HEIGHT / 2 + (body.y / Constants.SCALE) * Constants.ZOOM + Constants.PAN_Y);
+
+        //use scaled radius and not actual radius for drawing
+        double scaledRadius = body.getVisualRadius() * Constants.ZOOM;
         g.fillOval(
-                (int) (screenX - body.radius * Constants.ZOOM),
-                (int) (screenY - body.radius*Constants.ZOOM),
-                (int) (body.radius * 2 * Constants.ZOOM),
-                (int) (body.radius * 2 * Constants.ZOOM)
+                (int) (screenX - scaledRadius),
+                (int) (screenY - scaledRadius),
+                (int) (scaledRadius * 2),
+                (int) (scaledRadius * 2)
         );
 
         //update trail and draw

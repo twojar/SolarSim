@@ -4,12 +4,10 @@ import java.util.ArrayList;
 
 public class Window extends JFrame implements Runnable {
 
-    //array for drawing circles
+    //array for drawing circles, array for bodies
     private ArrayList<Circle> circles = new ArrayList<>();
+    public ArrayList<Body> bodies = new ArrayList<>();
 
-    //sun body for testing
-    public Body earth;
-    public Body sun;
     public Graphics2D g2;
 
 
@@ -30,12 +28,53 @@ public class Window extends JFrame implements Runnable {
         g2 = (Graphics2D) this.getGraphics();
         this.addKeyListener(new KeyHandler());
 
-        //sun body pair
-        this.sun = new Body(1.989e30, 0, 0, 0, 0,20);
+
+        //Body-Circle Pairs for Testing
+
+        //Sun
+        Body sun = new Body(1.989e30, 0, 0, 0, 0,6.9634e8);
+        bodies.add(sun);
         circles.add(new Circle(sun, Color.YELLOW));
 
-        this.earth = new Body(5.972e24, 0, 29783, 1.496e11, 0, 5); // mass, vx, vy, x, y, radius
-        circles.add(new Circle(earth, Color.BLUE));
+        //Mercury
+        Body mercury = new Body(3.285e23, 0, 47900, 66.575e9 , 0,2.439e6);
+        bodies.add(mercury);
+        circles.add(new Circle(mercury, new Color(169, 169, 169)));
+
+        //Venus
+        Body venus = new Body(4.867e24, 0, 35020, 108.45e9, 0,6.0518e6);
+        bodies.add(venus);
+        circles.add(new Circle(venus, new Color(255, 204, 153)));
+
+        //Earth
+        Body earth = new Body(5.972e24, 0, 29783, 1.496e11, 0, 6.371e6);
+        bodies.add(earth);
+        circles.add(new Circle(earth, new Color(80, 160, 255)));
+
+        //Mars
+        Body mars = new Body(6.39e23,0,24077, 250.58e9,0, 3.3895e6);
+        bodies.add(mars);
+        circles.add(new Circle(mars, new Color(188, 39, 50)));
+
+        // Jupiter
+        Body jupiter = new Body(1.898e27, 0, 13070, 778.57e9, 0, 6.9911e7);
+        bodies.add(jupiter);
+        circles.add(new Circle(jupiter, new Color(194, 142, 85)));
+
+        // Saturn
+        Body saturn = new Body(5.683e26, 0, 9680, 1.4335e12, 0, 5.8232e7);
+        bodies.add(saturn);
+        circles.add(new Circle(saturn, new Color(226, 204, 128)));
+
+        // Uranus
+        Body uranus = new Body(8.681e25, 0, 6800, 2.8725e12, 0, 2.5362e7);
+        bodies.add(uranus);
+        circles.add(new Circle(uranus, new Color(173, 216, 230)));
+
+        // Neptune
+        Body neptune = new Body(1.024e26, 0, 5430, 4.4951e12, 0, 2.4622e7);
+        bodies.add(neptune);
+        circles.add(new Circle(neptune, new Color(72, 61, 139)));
     }
 
 
@@ -50,27 +89,47 @@ public class Window extends JFrame implements Runnable {
         g2.drawImage(dbImage, 0, 0, this);
     }
 
+
+    /*
+    * GENERALIZED FUNCTION TO HANDLE GRAVITY CALCULATIONS FOR N-BODIES
+    */
     public void updateGravity(double dt){
-        double dx = sun.x - earth.x;
-        double dy = sun.y - earth.y;
-        double distance = Math.sqrt(dx*dx + dy*dy); //a^2 + b^2 = c^2
+        for(Body a : bodies){
+            //net force
+            double fx = 0;
+            double fy = 0;
+            for(Body b : bodies){
+                if (a == b) continue;
 
-        //force equation
-        double force = Constants.GRAVITATIONAL_CONSTANT * ((sun.mass * earth.mass)/(distance * distance));
+                //get x and y direction vector and calculate total distance
+                double dx = b.x - a.x;
+                double dy = b.y - a.y;
+                double distance = Math.sqrt(dx * dx + dy * dy);
 
-        //normalize direction
-        double fx = force * dx/distance;
-        double fy = force * dy/distance;
+                //TODO: ADD CONDITION FOR COLLISION
 
-        //acceleration
-        double ax = fx/earth.mass;
-        double ay = fy/earth.mass;
-        earth.vx += ax * dt;
-        earth.vy += ay * dt;
+                //Newton's gravity force calculation
+                double force = Constants.GRAVITATIONAL_CONSTANT * a.mass * b.mass / (distance * distance);
 
-        //update position with velocity
-        earth.x += earth.vx * dt;
-        earth.y += earth.vy * dt;
+                //break force down in x and y components
+                fx += force * dx/distance;
+                fy += force * dy/distance;
+            }
+
+            //acceleration
+            double ax = fx /a.mass;
+            double ay = fy /a.mass;
+
+            //update velocity of a
+            a.vx += ax * dt;
+            a.vy += ay * dt;
+        }
+
+        for (Body b: bodies){
+            //update position of each body after loop
+            b.x += b.vx * dt;
+            b.y += b.vy * dt;
+        }
     }
 
     //draw to buffer image
@@ -82,7 +141,6 @@ public class Window extends JFrame implements Runnable {
             circle.draw(g2);
         }
     }
-
 
     //run window thread
     public void run(){
