@@ -9,6 +9,10 @@ public class Window extends JFrame implements Runnable {
     public ArrayList<Body> bodies = new ArrayList<>();
 
     public Graphics2D g2;
+    public Text zoomText;
+    public Text timeScaleText;
+
+
 
 
     //init window
@@ -27,6 +31,12 @@ public class Window extends JFrame implements Runnable {
 
         g2 = (Graphics2D) this.getGraphics();
         this.addKeyListener(new KeyHandler());
+        this.addMouseWheelListener(new MouseHandler());
+
+        this.zoomText =  new Text(30, 70, "ZOOM:" + Constants.ZOOM, new Font("Lucida Console", Font.PLAIN, 30), Color.WHITE);
+        this.timeScaleText =  new Text(30, 100, "TIME:" + Constants.TIME_SCALE, new Font("Lucida Console", Font.PLAIN, 30), Color.WHITE);
+
+
 
 
         //Body-Circle Pairs for Testing
@@ -87,6 +97,8 @@ public class Window extends JFrame implements Runnable {
         Graphics dbg = dbImage.getGraphics();
         this.draw(dbg);
         g2.drawImage(dbImage, 0, 0, this);
+        this.zoomText.updateZoom(zoomText, Constants.ZOOM);
+        this.timeScaleText.updateScale(timeScaleText, Constants.TIME_SCALE);
     }
 
 
@@ -140,6 +152,8 @@ public class Window extends JFrame implements Runnable {
         for (Circle circle : circles) {
             circle.draw(g2);
         }
+        zoomText.draw(g2);
+        timeScaleText.draw(g2);
     }
 
     //run window thread

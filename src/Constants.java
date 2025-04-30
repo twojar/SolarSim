@@ -6,8 +6,9 @@ public class Constants {
     public static int INSETS_RIGHT;
     public static final double SCALE = 1e9;
     public static final double GRAVITATIONAL_CONSTANT = 6.67430e-11;
-    public static final double TIME_SCALE = 1000000; //10000 seconds per 1 real second
+    public static double TIME_SCALE = 10000; // x per 1 real second
     public static double ZOOM = 1.0;
     public static double PAN_X = 0.0;
     public static double PAN_Y = 0.0;
+    public static final double ZOOM_FACTOR = 1.1;
 }

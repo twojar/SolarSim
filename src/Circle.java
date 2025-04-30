@@ -31,7 +31,7 @@ public class Circle {
 
         //update trail and draw
         trail.add(new double[]{body.x,body.y});
-        if(trail.size() > 100000) trail.remove(0);
+        if(trail.size() > 10000) trail.remove(0);
         g.setColor(color.darker());
         for (double[] pos: trail){
             //convert position to screen coordinates and draw

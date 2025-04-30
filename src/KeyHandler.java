@@ -17,6 +17,8 @@ public class KeyHandler implements KeyListener {
         if (key == KeyEvent.VK_DOWN) Constants.PAN_Y -= 20;
         if (key == KeyEvent.VK_EQUALS) Constants.ZOOM *= 1.1;
         if (key == KeyEvent.VK_MINUS) Constants.ZOOM /= 1.1;
+        if (key == KeyEvent.VK_E) Constants.TIME_SCALE *= 1.1;
+        if (key == KeyEvent.VK_Q) Constants.TIME_SCALE /= 1.1;
 
     }
 
