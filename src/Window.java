@@ -3,17 +3,12 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Window extends JFrame implements Runnable {
-
     //array for drawing circles, array for bodies
     private ArrayList<Circle> circles = new ArrayList<>();
     public ArrayList<Body> bodies = new ArrayList<>();
-
     public Graphics2D g2;
     public Text zoomText;
     public Text timeScaleText;
-
-
-
 
     //init window
     public Window(){
@@ -36,10 +31,9 @@ public class Window extends JFrame implements Runnable {
         this.zoomText =  new Text(30, 70, "ZOOM:" + Constants.ZOOM, new Font("Lucida Console", Font.PLAIN, 30), Color.WHITE);
         this.timeScaleText =  new Text(30, 100, "TIME:" + Constants.TIME_SCALE, new Font("Lucida Console", Font.PLAIN, 30), Color.WHITE);
 
-
-
-
-        //Body-Circle Pairs for Testing
+        /*
+        * Body-Circle Pairs for Testing (Solar System)
+        */
 
         //Sun
         Body sun = new Body(1.989e30, 0, 0, 0, 0,6.9634e8);
@@ -47,10 +41,11 @@ public class Window extends JFrame implements Runnable {
         circles.add(new Circle(sun, Color.YELLOW));
 
         //Mercury
-        Body mercury = new Body(3.285e23, 0, 47900, 66.575e9 , 0,2.439e6);
+        Body mercury = new Body(3.285e23, 0, 0, 66.575e9 , 0,2.439e6);
         bodies.add(mercury);
         circles.add(new Circle(mercury, new Color(169, 169, 169)));
 
+        /*
         //Venus
         Body venus = new Body(4.867e24, 0, 35020, 108.45e9, 0,6.0518e6);
         bodies.add(venus);
@@ -85,8 +80,9 @@ public class Window extends JFrame implements Runnable {
         Body neptune = new Body(1.024e26, 0, 5430, 4.4951e12, 0, 2.4622e7);
         bodies.add(neptune);
         circles.add(new Circle(neptune, new Color(72, 61, 139)));
-    }
 
+         */
+    }
 
     //update every frame
     public void update(double dt){
@@ -100,7 +96,6 @@ public class Window extends JFrame implements Runnable {
         this.zoomText.updateZoom(zoomText, Constants.ZOOM);
         this.timeScaleText.updateScale(timeScaleText, Constants.TIME_SCALE);
     }
-
 
     /*
     * GENERALIZED FUNCTION TO HANDLE GRAVITY CALCULATIONS FOR N-BODIES
@@ -118,7 +113,21 @@ public class Window extends JFrame implements Runnable {
                 double dy = b.y - a.y;
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
-                //TODO: ADD CONDITION FOR COLLISION
+                // very rough collision handling
+                // this is a complete pos :(
+                //screen-space
+                double aScreenX = (int)(Constants.SCREEN_WIDTH / 2 + (a.x / Constants.SCALE) * Constants.ZOOM + Constants.PAN_X);
+                double aScreenY = (int)(Constants.SCREEN_HEIGHT / 2 + (a.y / Constants.SCALE) * Constants.ZOOM + Constants.PAN_Y);
+                double bScreenX = (int)(Constants.SCREEN_WIDTH / 2 + (b.x / Constants.SCALE) * Constants.ZOOM + Constants.PAN_X);
+                double bScreenY = (int)(Constants.SCREEN_HEIGHT / 2 + (b.y / Constants.SCALE) * Constants.ZOOM + Constants.PAN_Y);
+                //touching colours
+                double ar = a.getVisualRadius() * Constants.ZOOM;
+                double br = a.getVisualRadius() * Constants.ZOOM;
+                double visualDistance = Math.hypot(bScreenX - aScreenX, bScreenY - aScreenY);
+                if (visualDistance <= (ar + br)){
+                    System.out.println("Touching!");
+                }
+                //end of the collision handling
 
                 //Newton's gravity force calculation
                 double force = Constants.GRAVITATIONAL_CONSTANT * a.mass * b.mass / (distance * distance);

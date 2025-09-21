@@ -13,14 +13,17 @@ public class Text {
         this.font = font;
         this.color = color;
     }
+
     public void draw(Graphics g) {
         g.setFont(font);
         g.setColor(color);
         g.drawString(text, x, y);
     }
+
     public void updateZoom(Text text, Double value){
         text.text = String.format("ZOOM: %.1fx", value);
     }
+
     public void updateScale(Text text, Double value){
         text.text = String.format("TIME: %.0fx", value);
     }
